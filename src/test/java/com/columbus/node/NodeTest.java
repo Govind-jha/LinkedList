@@ -40,8 +40,7 @@ public class NodeTest {
 
     @Test
     public void testGetNext(){
-        Node<String> testNode = new Node();
-        testNode.setData("5");
+        Node<String> testNode = new Node("5");
         testNode.setNext(null);
 
         // This works because we have overridden the equals() and hashCode() method in class Node
@@ -50,8 +49,7 @@ public class NodeTest {
 
     @Test
     public void testSetNext(){
-        Node<String> testNode = new Node();
-        testNode.setData("3");
+        Node<String> testNode = new Node("3");
         testNode.setNext(null);
 
         node.setNext(testNode);

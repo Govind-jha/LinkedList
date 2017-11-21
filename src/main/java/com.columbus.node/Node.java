@@ -22,9 +22,10 @@ public class Node<T> {
 
     /**
      * Constructor for creating an instance of the Node object.
-     * This represents an imaginary node with null data and no pointer values assigned to it yet.
+     * This represents an node with no next pointer assigned to it yet.
      */
-    public Node() {
+    public Node(T data) {
+        this.data = data;
     }
 
     /**
