@@ -77,15 +77,15 @@ public class LinkedListTest {
     @Test
     public void testInsertWithIndexNegative() {
         assertThatThrownBy(() -> {
-            list.insert(0,null);
-        }).as("Adding null node to list throws exception").hasMessage("ERROR: Tried to insert a null node into the list");
+            list.insert(-1,new Node<Integer>(2));
+        }).as("Adding node to list with -ve index throws exception").hasMessage("ERROR: Index is out of bounds [0, length].");
     }
 
     @Test
     public void testInsertWithIndexMoreThanLength() {
         assertThatThrownBy(() -> {
-            list.insert(0,null);
-        }).as("Adding null node to list throws exception").hasMessage("ERROR: Tried to insert a null node into the list");
+            list.insert(10,new Node<Integer>(5));
+        }).as("Adding node to list at index more than length throws exception").hasMessage("ERROR: Index is out of bounds [0, length].");
     }
 
     @Test
