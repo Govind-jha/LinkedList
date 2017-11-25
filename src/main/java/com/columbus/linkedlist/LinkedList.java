@@ -1,8 +1,10 @@
 package com.columbus.linkedlist;
 
 import com.columbus.node.Node;
+
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class LinkedList<T> {
 
 
@@ -26,7 +28,7 @@ public class LinkedList<T> {
     /**
      * Constructor to create a Linked List with node as the head
      *
-     * @param node
+     * @param @{@link Node}
      */
     public LinkedList(Node node) {
         this.head = node;
@@ -34,28 +36,42 @@ public class LinkedList<T> {
     }
 
     /**
-     * Add a node at the beginning of the list
+     * This returns the length of the list
      *
-     * @param node
-     * @return boolean
+     * @return int
      */
-    public synchronized boolean add(Node<T> node) {
-        if (Optional.ofNullable(node).isPresent()) {
-            if (Optional.ofNullable(head).isPresent()) {
-                node.setNext(head);
-            }
-            head = node;
-            length++;
-            return true;
-        }
-
-        return false;
+    public int getLength() {
+        return this.length;
     }
 
     /**
      * Add a node at the beginning of the list
      *
-     * @param node
+     * @param @{@link Node}
+     * @return boolean
+     */
+    public synchronized boolean add(Node<T> node) {
+
+        if (!Optional.ofNullable(node).isPresent()) {
+            throw new RuntimeException("ERROR: Tried to insert a null node into the list");
+        }
+
+        if (this.length == 0) {
+            this.head = node;
+            this.length = 1;
+        } else {
+            node.setNext(head);
+            this.head = node;
+            this.length++;
+        }
+
+        return true;
+    }
+
+    /**
+     * Add a node at the beginning of the list
+     *
+     * @param @{@link Node}
      * @return boolean
      */
     public synchronized boolean insertAtBeginning(Node<T> node) {
@@ -65,58 +81,69 @@ public class LinkedList<T> {
     /**
      * Add a node at the end of the list
      *
-     * @param node
+     * @param @{@link Node}
      * @return boolean
      */
     public synchronized boolean insertAtLast(Node<T> node) {
-        if (Optional.ofNullable(node).isPresent()) {
-            if (Optional.ofNullable(head).isPresent()) {
-                Node<T> cursor = head;
-                while ((cursor = cursor.getNext()) != null) {
-                }
-                cursor.setNext(node);
-            } else {
-                head = node;
-            }
-            length++;
-            return true;
+
+        if (!Optional.ofNullable(node).isPresent()) {
+            throw new RuntimeException("ERROR: Tried to insert a null node into the list");
         }
-        return false;
+
+        if (this.length == 0) {
+            this.head = node;
+            this.length = 1;
+        } else {
+            int cursor = 0;
+            Node<T> pointer = head;
+
+            while (++cursor < this.length) {
+                pointer = pointer.getNext();
+            }
+
+            pointer.setNext(node);
+            this.length++;
+        }
+
+        return true;
     }
 
     /**
      * Add a node at the i-th position from the start of list
+     * Index starts with 0 and can have maximum value equal to
+     * the length of the list i.e. the position next to last node.
      *
-     * @param node
+     * @param @{@link Node}
      * @return boolean
      */
     public synchronized boolean insert(int index, Node<T> node) {
+        if (!Optional.ofNullable(node).isPresent()) {
+            throw new RuntimeException("ERROR: Tried to insert a null node into the list");
+        }
+
+        if (index < 0 || index > length) {
+            throw new RuntimeException("ERROR: Index is out of bounds [0, length].");
+        }
 
         if (index == 0) {
             add(node);
-        } else if (index > 0 && index <= length + 1 && Optional.ofNullable(node).isPresent()) {
-            if (Optional.ofNullable(head).isPresent()) {
-                int i = 0;
-                Node<T> cursor = head;
-                Node<T> tempNode;
-
-                if (++i < index) {
-                    cursor = cursor.getNext();
-                }
-
-                tempNode = cursor.getNext();
-                node.setNext(tempNode);
-                cursor.setNext(node);
-                length++;
-                return true;
-            } else {
-                throw new RuntimeException("The head of the Linked List is null.");
-            }
+        } else if (index == this.length) {
+            insertAtLast(node);
         } else {
-            String message = Optional.ofNullable(node).isPresent() ? "Invalid Parameters: The node object is null." : "Invalid Parameters: The index specified is not valid.";
-            throw new RuntimeException(message);
+            int cursor = 0;
+            Node<T> pointer = head, tempNode;
+
+            while (++cursor < index) {
+                pointer = pointer.getNext();
+            }
+
+            tempNode = pointer.getNext();
+            pointer.setNext(node);
+            node.setNext(tempNode);
+            this.length++;
         }
-        return false;
+
+        return true;
     }
 
     /**
@@ -124,18 +151,24 @@ public class LinkedList<T> {
      *
      * @return String
      */
-    public String getValuesInCSV() {
+    public String getValuesAsCSV() {
+        assert null != head;
         Node<T> cursor = head;
-        String values = "";
-        if (Optional.ofNullable(head).isPresent()) {
-            int i = 0;
-            do {
-                values += cursor.getData() + ",";
-            } while ((cursor = cursor.getNext()) != null);
-            // remove the extra comma at the end
-            values += "\b";
+
+        StringBuilder values = new StringBuilder().append(this.head.getData());
+        while (Optional.ofNullable(cursor = cursor.getNext()).isPresent()) {
+            values.append(",");
+            values.append(cursor.getData());
         }
-        return values;
+
+        return values.toString();
     }
 
+    @Override
+    public String toString() {
+        return "LinkedList{" +
+                "list=" + getValuesAsCSV() +
+                ", length=" + length +
+                '}';
+    }
 }

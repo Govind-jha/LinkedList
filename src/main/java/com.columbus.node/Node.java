@@ -2,22 +2,22 @@ package com.columbus.node;
 
 /**
  * Node is a representation of a simplest element in a Linked List.
- * The Node object can hold an Object data and a reference to the next node in a Linked List.
+ * The Node object holds a data Object and a pointer to the next node in a Linked List.
  * This can be represented as Node{data, pointer}.
+ * I have assumed that a node without a data value can't exist in real plane.
  *
- * @param <T>
- *     T Object
+ * @param <T> T Object
  */
 public class Node<T> {
     /**
      * This stores the data for the node.
      */
-     private T data;
+    private T data;
 
     /**
      * This stores the pointer to the next node from the node.
      */
-     private Node next;
+    private Node next;
 
 
     /**
@@ -41,6 +41,7 @@ public class Node<T> {
 
     /**
      * This method returns data for the node.
+     *
      * @return Object
      */
     public T getData() {
@@ -49,6 +50,7 @@ public class Node<T> {
 
     /**
      * This method sets the data for the node.
+     *
      * @param data
      */
     public void setData(T data) {
@@ -56,19 +58,21 @@ public class Node<T> {
     }
 
     /**
-     * This method sets next for the node.
-     * @param next
-     */
-    public void setNext(Node next) {
-        this.next = next;
-    }
-
-    /**
      * This method returns next for the node.
+     *
      * @return @{@link Node<T>}
      */
     public Node getNext() {
         return next;
+    }
+
+    /**
+     * This method sets next for the node.
+     *
+     * @param next
+     */
+    public void setNext(Node next) {
+        this.next = next;
     }
 
     @Override
